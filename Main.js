@@ -1,19 +1,37 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import { Button, TextInput, Appbar } from 'react-native-paper'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
-const Main = () => {
+const Main = ({navigation}) => {
 
 	const [currentInput, setCurrentInput] = useState('')
 	const [jars, setJars] = useState([])
+    
+	const defaultColors = {
+		blue: '#00ccff',
+		red: '#ff5050',
+		green: '#66ff66',
+		orange: '#ff9933',
+		yellow: 'ffdb4d',
+		purple: '#cc99ff',
+		gray: '#ccc'
+	}
+    
+    
+	const randomColor = () => {
+		let keys = Object.keys(defaultColors)
+		return defaultColors[keys[ keys.length * Math.random() << 0]]
+	}
+	
     
 	const addItem = async () => {
 		if (currentInput !== '') {
 			var newJar = {
 				name: currentInput,
-				color: 'pink' ,//random color
+				color: randomColor(),
 				scraps: [],
 			}	 
 			const jsonValue = JSON.stringify(newJar)
@@ -26,7 +44,12 @@ const Main = () => {
 		const getJars = async () => {
 			let keys = []
 			keys = await AsyncStorage.getAllKeys()
-			setJars(keys)
+			let values = await AsyncStorage.multiGet(keys)
+			let out = []
+			values.forEach(x => {
+				out.push(JSON.parse(x[1]))
+			})
+			setJars(out)
 		}
 		getJars()
 	}, [currentInput])
@@ -60,8 +83,12 @@ const Main = () => {
 					return (
 						<Button 
 							mode='contained'
-							style={styles.widget}
-							key={key}>{jar}</Button>
+							style={{...styles.widget, backgroundColor: jar.color  }}
+							key={key}
+							onPress={() => {navigation.navigate('Jar', {jar: jar}) }}
+						>
+							{jar.name}
+						</Button>
 					)
 				})}
 			</View>

@@ -10,11 +10,10 @@ import colorChange from '../utils/colorChange'
 //TODO: allow to clear and delete scraps and jars
 
 const Jar = (props) => {
-
 	const [currentInput, setCurrentInput] = useState('')
-	const [scraps, setScraps] = useState([])
+	const [scraps, setScraps] = useState(props.route.params.jar.scraps)
 
-	const lightColor = colorChange(props.color,.25)
+	const lightColor = colorChange(props.route.params.jar.color,.25)
   
 
 	const addItem = (e) => {
@@ -26,6 +25,7 @@ const Jar = (props) => {
 			}
 
 			setScraps(scraps.concat(newScrap))
+			//TODO: Async store it in this jars scraps
 			setCurrentInput('')
 		}
 		//e.preventDefault();
@@ -52,12 +52,12 @@ const Jar = (props) => {
 		<ScrollView style={styles.container}>
 
 			<View style={styles.headerStacked}>
-				<Text style={styles.title}> Jar Name </Text>
+				<Text style={styles.title}> {props.route.params.jar.name} </Text>
 				<Button 
 					mode="contained" 
 					onPress={() => selectScrap()} 
 					style={styles.random} 
-					color={props.color} >
+					color={props.route.params.jar.color} >
              Select A Scrap
 				</Button>
 			</View>
@@ -75,7 +75,7 @@ const Jar = (props) => {
 					compact={true} 
 					onPress={addItem} 
 					style={styles.add} 
-					color={props.color} >
+					color={props.route.params.jar.color} >
             +
 				</Button>
 			</View>
