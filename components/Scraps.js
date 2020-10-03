@@ -6,6 +6,7 @@ const Scraps = (props) => {
 	return(
 		<FlatList 
 			data={props.entries}
+			extraData={props.extraData}
 			renderItem={ ({item}) =>
 				<Text 
 					style={{...styles.scrap, backgroundColor: props.color}} 

@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, TextInput } from 'react-native-paper'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import Scraps from './Scraps'
 import colorChange from '../utils/colorChange'
+import AsyncStorage from '@react-native-community/async-storage'
  
 
 //TODO: allow to clear and delete scraps and jars
@@ -16,26 +17,47 @@ const Jar = (props) => {
 	const lightColor = colorChange(props.route.params.jar.color,.25)
   
 
-	const addItem = (e) => {
+	//Add the scrap to storage
+	const addItem = () => {
 		if(currentInput !== ''){
-			console.log(currentInput)
 			var newScrap = {
 				text: currentInput,
 				key: Date.now()
+			}    
+			const tmpScraps = [...scraps, newScrap]
+			const store = async () => {
+        
+				try{
+					await AsyncStorage.mergeItem(props.route.params.jar.name, JSON.stringify({scraps: tmpScraps}))
+				}catch(e) {
+					alert(e)
+				}
 			}
-
-			setScraps(scraps.concat(newScrap))
-			//TODO: Async store it in this jars scraps
-			setCurrentInput('')
+			store()
+		} 
+		//Ma'am why wont you re-render?
+		setCurrentInput('')
+	} 
+  
+	//poll storage for scraps and update state with result
+	useEffect(() => {
+		const getScraps = async () => {
+			try{
+				let storedJar = await AsyncStorage.getItem(props.route.params.jar.name)
+				let parsed = JSON.parse(storedJar)
+				setScraps(parsed.scraps)
+			}catch(e){ 
+				alert(e)
+			}
 		}
-		//e.preventDefault();
-		console.log(scraps)
-	}
+    
+		getScraps()
+	}, [currentInput])
 
 	const selectScrap = () => {
 		if(scraps.length !== 0) {
 			var randomScrap = scraps[Math.floor(Math.random() * scraps.length)]
-			console.log(randomScrap)
+			console.log(randomScrap.text)
       
 			return (
 				<View>
@@ -80,7 +102,7 @@ const Jar = (props) => {
 				</Button>
 			</View>
 
-			<Scraps entries={scraps} color={lightColor}/>
+			<Scraps entries={scraps} color={lightColor} extraData={currentInput} /> 
 
 		</ScrollView>                                                                       
 	)
