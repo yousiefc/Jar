@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import { Button, TextInput, Card} from 'react-native-paper'
-import { Text, View, StyleSheet, ScrollView } from 'react-native'
+import { Text, View, StyleSheet, ScrollView, Dimensions } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 const Main = ({navigation}) => {
@@ -113,9 +113,11 @@ const Main = ({navigation}) => {
 const styles = StyleSheet.create({
 	container: {
 		//paddingTop: 70
+		flex: 1
 	},
 	header: {
 		flexDirection: 'row',
+		justifyContent: 'center',
 		alignItems: 'center',
 		//justifyContent: 'center',
 		marginVertical: 10
@@ -123,25 +125,27 @@ const styles = StyleSheet.create({
 	input: {
 		paddingLeft: 7,
 		paddingRight: 7,
-		marginRight: 6,
-		height: 36,
-		width: 346,
-		//borderRadius: 5,
+		height: 38,
+		width: Dimensions.get('window').width/1.22,
+		maxWidth: 500,
 		borderColor: '#aaa',
-		//borderWidth: 1,
+		marginRight: 7,
+		marginLeft: -7
+    
 	},
 	add: {
 		textAlign: 'center',
 		justifyContent: 'center',
-		height: 35,
+		height: Dimensions.get('window').width/10,
 		marginTop: 6,
-		width: 36,
+		width: Dimensions.get('window').width/10,
+		elevation: 4
 		//borderRadius: 5,
 		//backgroundColor: '#66ccff',
 	},
 	title: {
 		marginTop: 10,
-		fontSize: 20,
+		fontSize: 30,
 		fontWeight: 'bold',
 		textAlign: 'center',
 		justifyContent: 'center',
@@ -149,9 +153,12 @@ const styles = StyleSheet.create({
 	widget: {
 		textAlign: 'center',
 		justifyContent: 'center',
-		height: 150,
-		width: 375,
-		marginHorizontal: 10,
+		alignSelf: 'center',
+		height: Dimensions.get('window').width/2.7,
+		maxHeight: 200,
+		width: Dimensions.get('window').width -30,
+		maxWidth: 400,
+		elevation: 4,
 		marginVertical: 10
 	},
 	bottom: {

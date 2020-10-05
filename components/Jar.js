@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import { Button, TextInput } from 'react-native-paper'
-import { Text, View, StyleSheet, ScrollView } from 'react-native'
+import { Text, View, StyleSheet, ScrollView, SafeAreaView } from 'react-native'
 import Scraps from './Scraps'
 import colorChange from '../utils/colorChange'
 import AsyncStorage from '@react-native-community/async-storage'
@@ -71,7 +71,7 @@ const Jar = (props) => {
 	}
 
 	return (
-		<ScrollView style={styles.container}>
+		<SafeAreaView style={styles.container}>
 
 			<View style={styles.headerStacked}>
 				<Text style={styles.title}> {props.route.params.jar.name} </Text>
@@ -102,9 +102,11 @@ const Jar = (props) => {
 				</Button>
 			</View>
 
-			<Scraps entries={scraps} color={lightColor} extraData={currentInput} /> 
+			<View style={{marginBottom: 330}}>
+				<Scraps entries={scraps} color={lightColor} extraData={currentInput} /> 
+			</View>
 
-		</ScrollView>                                                                       
+		</SafeAreaView>                                                                       
 	)
 }
 
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
 	container: {
 		//alignItems: 'center',
 		//justifyContent: 'center',
-		paddingTop: 20,
+		paddingTop: 50,
 	},
 	input: {
 		paddingLeft: 7,
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		marginTop: 10,
-		fontSize: 20,
+		fontSize: 28,
 		fontWeight: 'bold',
 		textAlign: 'center',
 		justifyContent: 'center',

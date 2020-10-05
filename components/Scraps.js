@@ -7,6 +7,7 @@ const Scraps = (props) => {
 		<FlatList 
 			data={props.entries}
 			extraData={props.extraData}
+			keyExtractor={item => item.key.toString()}
 			renderItem={ ({item}) =>
 				<Text 
 					style={{...styles.scrap, backgroundColor: props.color}} 
