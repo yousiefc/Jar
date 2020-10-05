@@ -8,6 +8,7 @@ import Jar from './components/Jar'
 import Main from './Main'
 import { NavigationContainer } from '@react-navigation/native' //TODO: stack navigator for all the components!!!
 import { createStackNavigator } from '@react-navigation/stack'
+import { registerRootComponent } from 'expo'
 
 
 const Stack = createStackNavigator()
@@ -20,8 +21,8 @@ const App = () => {
 		<NavigationContainer>
 			<PaperProvider theme={theme}>
 				<Surface style={styles.container}>
-					<Stack.Navigator initialRouteName='Main'>
-						<Stack.Screen name="Main" component={Main} />
+					<Stack.Navigator initialRouteName='Main'screenOptions={{headerShown: false}}>
+						<Stack.Screen name="Main" component={Main}  />
 						<Stack.Screen name="Jar" component={Jar} />
 					</Stack.Navigator>
 				</Surface>
@@ -42,5 +43,5 @@ const styles = StyleSheet.create({
 		minHeight: 300
 	}
 })
-
+registerRootComponent(App)
 export default App

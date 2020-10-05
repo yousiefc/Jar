@@ -50,9 +50,9 @@ const Jar = (props) => {
 				alert(e)
 			}
 		}
-    
+  
 		getScraps()
-	}, [currentInput])
+	})
 
 	const selectScrap = () => {
 		if(scraps.length !== 0) {

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
-import { Button, TextInput, Appbar } from 'react-native-paper'
+import { Button, TextInput, Card} from 'react-native-paper'
 import { Text, View, StyleSheet, ScrollView } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -40,6 +40,10 @@ const Main = ({navigation}) => {
 		setCurrentInput('')	 
 	}
     
+	const removeItem = async (key) => {
+		await AsyncStorage.removeItem(key)
+	}
+    
 	useEffect(() => {
 		const getJars = async () => {
 			let keys = []
@@ -52,7 +56,7 @@ const Main = ({navigation}) => {
 			setJars(out)
 		}
 		getJars()
-	}, [currentInput])
+	})
 
 	return (
 		<ScrollView style={styles.container} stickyHeaderIndices={[0]} showsVerticalScrollIndicator={false} >
@@ -72,7 +76,7 @@ const Main = ({navigation}) => {
 						compact={true} 
 						onPress={() => addItem()} 
 						style={styles.add} 
-						color='pink' >
+						color='#ccc' >
             +
 					</Button>
 				</View>
@@ -81,14 +85,21 @@ const Main = ({navigation}) => {
 			<View style={styles.bottom}>
 				{jars.map((jar, key) => {
 					return (
-						<Button 
+						<Card 
 							mode='contained'
-							style={{...styles.widget, backgroundColor: jar.color  }}
+							style={{...styles.widget, backgroundColor: jar ? jar.color : ''  }}
 							key={key}
 							onPress={() => {navigation.navigate('Jar', {jar: jar}) }}
 						>
-							{jar.name}
-						</Button>
+							<Button icon='close' 
+								color='#404040' 
+								style={{alignSelf: 'flex-end', marginRight: -15}}
+								onPress={() => {removeItem(jar ? jar.name : null)}}
+							>
+
+							</Button>
+							<Text style={{alignSelf: 'center', marginVertical: 30, fontWeight: 'bold', fontSize: 18, color: '#404040'}}>{jar ? jar.name : ''}</Text>
+						</Card>
 					)
 				})}
 			</View>
