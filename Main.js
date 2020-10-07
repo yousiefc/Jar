@@ -45,6 +45,7 @@ const Main = ({navigation}) => {
 	}
     
 	useEffect(() => {
+		let mounted = true
 		const getJars = async () => {
 			let keys = []
 			keys = await AsyncStorage.getAllKeys()
@@ -55,7 +56,8 @@ const Main = ({navigation}) => {
 			})
 			setJars(out)
 		}
-		getJars()
+		if(mounted) getJars()
+		return () => mounted = false
 	})
 
 	return (

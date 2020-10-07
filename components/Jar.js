@@ -2,9 +2,9 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import { Button, TextInput } from 'react-native-paper'
-import { Text, View, StyleSheet, ScrollView, SafeAreaView } from 'react-native'
+import { Text, View, StyleSheet, SafeAreaView, Dimensions } from 'react-native'
 import Scraps from './Scraps'
-import colorChange from '../utils/colorChange'
+//import colorChange from '../utils/colorChange'
 import AsyncStorage from '@react-native-community/async-storage'
  
 
@@ -14,7 +14,7 @@ const Jar = (props) => {
 	const [currentInput, setCurrentInput] = useState('')
 	const [scraps, setScraps] = useState(props.route.params.jar.scraps)
 
-	const lightColor = colorChange(props.route.params.jar.color,.25)
+	//const lightColor = colorChange(props.route.params.jar.color,.2)
   
 
 	//Add the scrap to storage
@@ -41,6 +41,8 @@ const Jar = (props) => {
   
 	//poll storage for scraps and update state with result
 	useEffect(() => {
+
+		let mounted = true
 		const getScraps = async () => {
 			try{
 				let storedJar = await AsyncStorage.getItem(props.route.params.jar.name)
@@ -51,7 +53,8 @@ const Jar = (props) => {
 			}
 		}
   
-		getScraps()
+		if (mounted) getScraps()
+		return () => mounted = false
 	})
 
 	const selectScrap = () => {
@@ -103,7 +106,7 @@ const Jar = (props) => {
 			</View>
 
 			<View style={{marginBottom: 330}}>
-				<Scraps entries={scraps} color={lightColor} extraData={currentInput} /> 
+				<Scraps entries={scraps} color={props.route.params.jar.color} /> 
 			</View>
 
 		</SafeAreaView>                                                                       
@@ -115,19 +118,21 @@ const styles = StyleSheet.create({
 		//alignItems: 'center',
 		//justifyContent: 'center',
 		paddingTop: 50,
+		flex: 1
 	},
 	input: {
 		paddingLeft: 7,
 		paddingRight: 7,
-		marginRight: 6,
-		height: 36,
-		width: 346,
-		//borderRadius: 5,
+		height: 38,
+		width: Dimensions.get('window').width/1.22,
+		maxWidth: 500,
 		borderColor: '#aaa',
-		//borderWidth: 1,
+		marginRight: 7,
+		marginLeft: -7
 	},
 	header: {
 		flexDirection: 'row',
+		justifyContent: 'center',
 		alignItems: 'center',
 		//justifyContent: 'center',
 		marginVertical: 10
@@ -139,17 +144,16 @@ const styles = StyleSheet.create({
 	add: {
 		textAlign: 'center',
 		justifyContent: 'center',
-		height: 35,
+		height: Dimensions.get('window').width/10,
 		marginTop: 6,
-		width: 36,
-		//borderRadius: 5,
-		//backgroundColor: '#66ccff',
+		width: Dimensions.get('window').width/10,
+		elevation: 4
 	},
 	random: {
 		marginVertical: 10,
 		textAlign: 'center',
 		justifyContent: 'center',
-		height: 34,
+		height: Dimensions.get('window').height/20,
 		//width: 150,
 		//borderRadius: 5,
 		//backgroundColor: '#66ccff'
