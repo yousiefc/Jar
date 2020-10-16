@@ -11,12 +11,14 @@ const Main = ({navigation}) => {
 	const [jars, setJars] = useState([])
     
 	const defaultColors = {
-		blue: '#00ccff',
-		red: '#ff5050',
-		green: '#66ff66',
-		orange: '#ff9933',
-		yellow: '#ffdb4d',
-		purple: '#cc99ff',
+		pink: '#ff61ab',
+		blue: '#61ffb5',
+		red: '#ff6176',
+		green: '#abff61',
+		orange: '#ff8161',
+		yellow: '#ffea62',
+		yorange: '#ffb561',
+		purple: '#dd99ff',
 		gray: '#ccc'
 	}
     
@@ -45,6 +47,7 @@ const Main = ({navigation}) => {
 	}
     
 	useEffect(() => {
+
 		let mounted = true
 		const getJars = async () => {
 			let keys = []
@@ -114,14 +117,12 @@ const Main = ({navigation}) => {
 
 const styles = StyleSheet.create({
 	container: {
-		//paddingTop: 70
 		flex: 1
 	},
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		//justifyContent: 'center',
 		marginVertical: 10
 	},
 	input: {
@@ -142,8 +143,6 @@ const styles = StyleSheet.create({
 		marginTop: 6,
 		width: Dimensions.get('window').width/10,
 		elevation: 4
-		//borderRadius: 5,
-		//backgroundColor: '#66ccff',
 	},
 	title: {
 		marginTop: 10,

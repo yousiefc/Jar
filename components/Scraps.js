@@ -4,20 +4,25 @@ import { Text, StyleSheet, FlatList, Dimensions, View } from 'react-native'
 import { Button } from 'react-native-paper'
 import AsyncStorage from '@react-native-community/async-storage'
 
-const Scraps = (props) => {
+const Scraps = ({jar}) => {
 
-	const removeItem = async () => {
-		//TODO: these scraps need to be passed the full prop from the jar OR i just need to move this whole shebang to the Jar.js which tbh might save some headache
+	const removeItem = async (value) => {
+		const tmpScraps = jar.scraps.filter(scrap => scrap !== value)
+		try{
+			await AsyncStorage.mergeItem(jar.name, JSON.stringify({scraps: tmpScraps}))
+		}catch(e) {
+			alert(e)
+		}
 	}
 
 	return(
 		<FlatList 
-			data={props.entries}
+			data={jar.scraps}
 			keyExtractor={item => item.key.toString()}
 			renderItem={ ({item}) =>
 				<View>
 					<Text 
-						style={{...styles.scrap, backgroundColor: props.color}} 
+						style={{...styles.scrap, backgroundColor: jar.color}} 
 						key={item.key}
 					> 
 						{item.text}
