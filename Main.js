@@ -58,13 +58,15 @@ const Main = ({navigation}) => {
 				out.push(JSON.parse(x[1]))
 			})
 			setJars(out)
+			console.log('MAIN USE EFFECT')
 		}
+
 		if(mounted) getJars()
 		return () => mounted = false
 	})
 
 	return (
-		<ScrollView style={styles.container} stickyHeaderIndices={[0]} showsVerticalScrollIndicator={false} >
+		<ScrollView style={styles.container} stickyHeaderIndices={[0]} showsVerticalScrollIndicator={false}  >
             
 			<View style={{backgroundColor: '#f2f2f2', zIndex: 1000, paddingTop: 70}}>
 				<Text style={styles.title}>Your Jars</Text>
@@ -103,7 +105,7 @@ const Main = ({navigation}) => {
 							>
 
 							</Button>
-							<Text style={{alignSelf: 'center', marginVertical: 30, fontWeight: 'bold', fontSize: 18, color: '#404040'}}>{jar ? jar.name : ''}</Text>
+							<Text style={{alignSelf: 'center', marginVertical: 26, fontWeight: 'bold', fontSize: 22, color: '#404040'}}>{jar ? jar.name : ''}</Text>
 						</Card>
 					)
 				})}
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
 		height: Dimensions.get('window').width/10,
 		marginTop: 6,
 		width: Dimensions.get('window').width/10,
-		elevation: 4
+		elevation: 2
 	},
 	title: {
 		marginTop: 10,

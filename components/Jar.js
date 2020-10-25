@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
-import { Button, TextInput } from 'react-native-paper'
-import { Text, View, StyleSheet, SafeAreaView, Dimensions, FlatList } from 'react-native'
-import Scraps from './Scraps'
-//import colorChange from '../utils/colorChange'
+import { Button, TextInput, Portal, Dialog, Card } from 'react-native-paper'
+import { Text, View, StyleSheet, SafeAreaView, Dimensions, FlatList, Keyboard } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
-
 
 const Jar = (props) => {
 	const jar = props.route.params.jar
+	const [random, setRandom] = useState('')
+	const [visible, setVisible] = useState(false)
 	const [currentInput, setCurrentInput] = useState('')
 	const [scraps, setScraps] = useState(jar.scraps)
 
@@ -18,6 +17,8 @@ const Jar = (props) => {
 	/* SAVE SCRAP TO STORAGE */
 	const addItem = async () => {
 		if(currentInput !== ''){
+			Keyboard.dismiss()
+
 			var newScrap = {
 				text: currentInput,
 				key: Date.now()
@@ -56,6 +57,7 @@ const Jar = (props) => {
 			}catch(e){ 
 				alert(e)
 			}
+			console.log('SCRAP USE EFFECT')
 		}
   
 		if (mounted) getScraps()
@@ -66,27 +68,36 @@ const Jar = (props) => {
 	const selectScrap = () => {
 		if(scraps.length !== 0) {
 			var randomScrap = scraps[Math.floor(Math.random() * scraps.length)]
-			console.log(randomScrap.text)
-      
-			return (
-				<View>
-					<Text>
-              The choice is:
-					</Text>
-					<Text>{randomScrap.text}</Text>
-				</View>
-			)
+			console.log(randomScrap)
+			
+			setRandom(randomScrap.text)
+			showDialog()
 		}
 	}
 
+	const showDialog = () => setVisible(true)
+	const hideDialog = () => setVisible(false)
+
 	return (
-		<SafeAreaView style={styles.container}>
+		<SafeAreaView style={styles.container} >
+
+			<Portal>
+				<Dialog visible={visible} onDismiss={hideDialog}>
+					<Dialog.Title>Your choice is:</Dialog.Title>
+					<Dialog.Content>
+						<Text style={{...styles.title, color:jar.color}}>{random}</Text>
+					</Dialog.Content>
+					<Dialog.Actions>
+						<Button onPress={hideDialog}>Done</Button>
+					</Dialog.Actions>
+				</Dialog>
+			</Portal>
 
 			<View style={styles.headerStacked}>
 				<Text style={styles.title}> {jar.name} </Text>
 				<Button 
 					mode="contained" 
-					onPress={() => selectScrap()} 
+					onPress={selectScrap} 
 					style={styles.random} 
 					color={jar.color} >
              Select A Scrap
@@ -111,25 +122,25 @@ const Jar = (props) => {
 				</Button>
 			</View>
 
-			<View style={{marginBottom: 330}}>
+			<View style={{marginBottom: 180}}>
 				<FlatList 
 					data={scraps}
 					keyExtractor={item => item.key.toString()}
 					renderItem={ ({item}) =>
-						<View>
-							<Text 
-								style={{...styles.scrap, backgroundColor: jar.color}} 
+						<Card style={{...styles.scrap, backgroundColor: jar.color}}>
+							<Text  
 								key={item.key}
+								style={{alignSelf: 'center'}}
 							> 
 								{item.text}
 							</Text>
 							<Button icon='close' 
-								style={{position: 'absolute', alignSelf: 'flex-end', marginVertical: 10}} 
+								style={{position: 'absolute', alignSelf: 'flex-end', marginTop: -5}} 
 								color="#404040" 
 								compact={true}
 								onPress={ () => removeItem(item.key) } 
 							/>
-						</View>
+						</Card>
 					}
 				/>
 			</View>
@@ -170,7 +181,7 @@ const styles = StyleSheet.create({
 		height: Dimensions.get('window').width/10,
 		marginTop: 6,
 		width: Dimensions.get('window').width/10,
-		elevation: 4
+		elevation: 2
 	},
 	random: {
 		marginVertical: 10,
@@ -186,13 +197,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	scrap: {
-		textAlign: 'center',
+		justifyContent: 'center',
+		paddingVertical: 6,
 		height: Dimensions.get('window').height/22,
 		fontSize: 16,
-		paddingVertical: 8,
 		borderRadius: 3,
 		marginTop: 10,
-		color: '#404040'
+		marginHorizontal: 10,
+		color: '#404040',
+		elevation: 1
 	},
 
 })
