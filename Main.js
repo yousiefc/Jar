@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
-import { Button, TextInput, Card} from 'react-native-paper'
-import { Text, View, StyleSheet, ScrollView, Dimensions } from 'react-native'
+import { Button, TextInput, Card, Text} from 'react-native-paper'
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 const Main = ({navigation}) => {
 
 	const [currentInput, setCurrentInput] = useState('')
 	const [jars, setJars] = useState([])
+	const [addToggle, setAddToggle] = useState(false)
     
 	const defaultColors = {
 		pink: '#ff61ab',
@@ -37,7 +38,12 @@ const Main = ({navigation}) => {
 				scraps: [],
 			}	 
 			const jsonValue = JSON.stringify(newJar)
-			await AsyncStorage.setItem(currentInput, jsonValue)   		 
+			try {
+				await AsyncStorage.setItem(currentInput, jsonValue)
+				setAddToggle(!addToggle)
+			}catch(e){
+				alert(e)
+			}		 
 		}
 		setCurrentInput('')	 
 	}
@@ -58,12 +64,11 @@ const Main = ({navigation}) => {
 				out.push(JSON.parse(x[1]))
 			})
 			setJars(out)
-			console.log('MAIN USE EFFECT')
 		}
 
 		if(mounted) getJars()
 		return () => mounted = false
-	})
+	}, [addToggle])
 
 	return (
 		<ScrollView style={styles.container} stickyHeaderIndices={[0]} showsVerticalScrollIndicator={false}  >

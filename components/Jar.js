@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
-import { Button, TextInput, Portal, Dialog, Card } from 'react-native-paper'
-import { Text, View, StyleSheet, SafeAreaView, Dimensions, FlatList, Keyboard } from 'react-native'
+import { Button, TextInput, Portal, Dialog, Card, Text } from 'react-native-paper'
+import { View, StyleSheet, SafeAreaView, Dimensions, FlatList, Keyboard } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 
 const Jar = (props) => {
@@ -11,6 +11,7 @@ const Jar = (props) => {
 	const [visible, setVisible] = useState(false)
 	const [currentInput, setCurrentInput] = useState('')
 	const [scraps, setScraps] = useState(jar.scraps)
+	const [addToggle, setAddToggle] = useState(false)
 
 	//const lightColor = colorChange(props.route.params.jar.color,.2)
 
@@ -27,6 +28,7 @@ const Jar = (props) => {
         
 			try{
 				await AsyncStorage.mergeItem(jar.name, JSON.stringify({scraps: tmpScraps}))
+				setAddToggle(!addToggle)
 			}catch(e) {
 				alert(e)
 			}
@@ -57,18 +59,16 @@ const Jar = (props) => {
 			}catch(e){ 
 				alert(e)
 			}
-			console.log('SCRAP USE EFFECT')
 		}
   
 		if (mounted) getScraps()
 		return () => mounted = false
-	})
+	}, [addToggle])
 
 	/* SELECT A RANDOM SCRAP */
 	const selectScrap = () => {
 		if(scraps.length !== 0) {
 			var randomScrap = scraps[Math.floor(Math.random() * scraps.length)]
-			console.log(randomScrap)
 			
 			setRandom(randomScrap.text)
 			showDialog()
@@ -130,7 +130,8 @@ const Jar = (props) => {
 						<Card style={{...styles.scrap, backgroundColor: jar.color}}>
 							<Text  
 								key={item.key}
-								style={{alignSelf: 'center'}}
+								style={{alignSelf: 'center', fontSize: 20}}
+								
 							> 
 								{item.text}
 							</Text>

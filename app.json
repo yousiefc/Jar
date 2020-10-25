@@ -12,7 +12,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shmazoolstudios.scrapstack"
+    },
+    "android": {
+      "package": "com.shmazoolstudios.scrapstack"
     },
     "web": {
       "favicon": "./assets/favicon.png"

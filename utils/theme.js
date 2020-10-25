@@ -8,6 +8,7 @@ const theme = {
 		primary: '#3498db',
 		accent: '#f1c40f',
 		surface: '#f2f2f2',
+		text: '#404040'
 	},
 }
 
